@@ -1,8 +1,8 @@
-# Creating a Machine Learning-Based for check The Mental Health
+# Data analysis for check The Criteria for take a Courses in Udemy
 
 ---
 
-![Logo](./img/logo.svg)
+![Logo](./img/udemy.svg)
 
 ---
 
@@ -11,329 +11,320 @@
 
 ---
 
-## Date: December, 2022
+## Date: September, 2022
 
 ---
 
 ---
 
-# Project Objective
-The 2014 Mental Health in Tech Survey aimed to understand the prevalence of mental health issues within the tech industry and assess how companies in this sector are addressing these concerns. The survey was designed to raise awareness, identify gaps in support systems, and encourage better mental health practices within an industry known for high stress and burnout.
+# Project 
+Udemy is one of the largest online learning platforms, hosting thousands of courses across various domains. However, with the vast array of courses, it becomes challenging to assess the quality, demand, and effectiveness of the courses. The platform may face difficulties in:
 
-# Key Problematic Areas:
+- Identifying popular and high-quality courses.
+- Understanding which factors drive student engagement.
+- Predicting future trends and demands in different categories.
+- Ensuring that the courses are priced competitively and fairly.
+- Thus, conducting an analysis of the Udemy courses helps address these issues, focusing on patterns in course ratings, enrollments, content duration, pricing, and reviews.
 
-- Stigma Around Mental Health:
+# Objectives
 
-    - Perception of Mental Health: In 2014, mental health issues in the workplace, particularly in tech, were often seen as a sign of weakness. This stigma could prevent employees from seeking help or disclosing mental health conditions due to fear of being judged or discriminated against.
-    - Impact on Career: Employees were concerned that acknowledging mental health struggles could negatively impact their career progression, lead to fewer opportunities, or even result in job loss.
+The primary objectives of a Udemy Course Analysis could include:
 
-- Lack of Awareness and Education:
+- Identifying Trends and Popularity: Understanding which course topics are trending and what types of courses attract the most enrollments.
 
-    - Limited Mental Health Policies: Many companies, especially tech startups and small to medium-sized businesses, lacked formal mental health policies. Employees often did not know what resources were available or how to access mental health support.
-    - Untrained Management: Many managers and HR departments were not equipped with the necessary training to recognize or support employees facing mental health challenges. This lack of awareness could exacerbate stress and workplace dissatisfaction.
+- Price vs. Enrollment Analysis: Exploring how the price of a course impacts its enrollment and overall success.
 
-- Workplace Culture:
+- Quality Assessment: Analyzing student feedback, ratings, and reviews to determine the factors influencing course quality.
 
-    - High-Pressure Environment: The tech industry is known for its long hours, tight deadlines, and high expectations, often contributing to stress, anxiety, and burnout. The survey aimed to measure the impact of this environment on mental health.
-    - Remote Work and Isolation: Many tech employees work remotely or have flexible hours, which, while convenient, can lead to isolation and a lack of social support from colleagues.
+- Predictive Analytics: Using machine learning techniques to predict future course enrollments and popularity based on existing data.
 
-- Access to Mental Health Resources:
+- Instructor Insights: Investigating the role of instructors' experience, reputation, and teaching style in course success.
 
-    - Unequal Access: While some large tech companies provided mental health benefits such as therapy or counseling, smaller companies and startups often didn’t have the resources to offer comprehensive mental health support.
-    - Cost and Insurance Barriers: Even when mental health resources were available, employees could face significant barriers, such as high costs or lack of coverage in health insurance plans.
+- Category Performance: Examining how different categories (e.g., technology, business, arts) perform in terms of enrollments and ratings.
 
 # Table of Contents
-1. Data Introduction
-2. Data Cleaning
-   2.1 Null Values
-      - 2.1.1 Comments
-      - 2.1.2 States
-      - 2.1.3 Work Interfere
-      - 2.1.4 Self Employed
-   2.2 Data Consistency
-      - 2.2.1 Gender
-      - 2.2.2 Age
-3. Data Analysis & Visualizations
-   - 3.1 Age
-   - 3.2 Gender
-   - 3.3 Country
-   - 3.4 Work Interference with Mental Health based on Gender
-   - 3.5 Work Interference with Mental Health based on the Company Type (Tech/Non-Tech)
-   - 3.6 Remote Work Environment and Work Interference
-   - 3.7 Mental Health Benefits
-   - 3.8 Mental Health vs. Physical Health
-     - 3.8.1 Do you think that discussing a health issue with your employer would have negative consequences?
-     - 3.8.2 Have you heard of or observed negative consequences with mental health conditions in your workplace?
-   - 3.9 Mental/Physical Health Issues in Interviews
-     - 3.9.1 Would you bring up a mental/physical health issue with a potential employer in an interview?
-   - 3.10 Willingness to Discuss a Mental Health Issue
-   - 3.11 Word Cloud on Comments
-4. Machine Learning
-   - Cleaning
-   - Encoding
-   - Scaling & Fitting
-   - Logistic Regression
-   - K-Neighbors Classifier
-   - Decision Tree Classifier
-   - Random Forest
-   - Accuracy Scores
-5. Conclusion
+
+ 1. Data Cleaning
+ 2. Exploratory Data Analysis
+
+    2.1 Subject Categories
+    2.2 The Most Famouse Course
+
+    2.2.1 All subjects
+    2.2.2 Each subjects
+
+    2.3 The Level of Courses under Each Categories
+    2.4 Price of the Courses
+    2.5 Free vs Paid Courses
+
+     2.5.1 Number of free vs paid courses
+     2.5.2 Different factors in free vs paid courses
+
+    2.6 Time Series
+    2.7 Relationships Between Numberical Values
+ 3. Machine Learning
+    3.1 Linear Regression
+    3.2 Random Forest
+
 
 ```python
 import pandas as pd
 import numpy as np
+pd.set_option('display.max_columns', None)
 import plotly.express as px
-import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
-from collections import Counter
-import matplotlib.pyplot as plt
-import re
-import seaborn as sns
-from sklearn.model_selection import train_test_split
-from sklearn import preprocessing
-from sklearn.preprocessing import LabelEncoder, MinMaxScaler
-from sklearn.linear_model import LogisticRegression
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn import metrics
-from sklearn.metrics import accuracy_score
-from sklearn.model_selection import cross_val_score
-
-# Display all columns
-pd.set_option('display.max_columns', None)
-
-# Load the dataset
-survey = pd.read_csv('survey.csv')
-
-
-## 1. Data Cleaning
-
-```python
-import pandas as pd
-import numpy as np
-pd.set_option('display.max_columns', None)
-pd.set_option('display.max_rows', 100)
-import plotly.express as px
 import plotly.graph_objects as go
-import matplotlib.pyplot as plt
-from collections import Counter
-from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
+
+
+df = pd.read_csv('udemy_courses.csv')
+df.head()
 
 ```
-## Data Descriptions
-
-| Column Name            | Description                                                                       |
-|------------------------|-----------------------------------------------------------------------------------|
-| family_history          | Do you have a family history of mental illness?                                   |
-| treatment               | Have you sought treatment for a mental health condition?                          |
-| work_interfere          | If you have a mental health condition, do you feel that it interferes with work?  |
-| no_employees            | How many employees does your company or organization have?                        |
-| remote_work             | Do you work remotely (outside of an office) at least 50% of the time?             |
-| tech_company            | Is your employer primarily a tech company/organization?                           |
-| benefits                | Does your employer provide mental health benefits?                                |
-| care_options            | Do you know the mental health care options provided by your employer?             |
-| wellness_program        | Has your employer ever discussed mental health as part of a wellness program?     |
-| seek_help               | Does your employer provide resources to learn about mental health and seek help?  |
-| anonymity               | Is your anonymity protected if you use mental health or substance abuse resources?|
-| leave                   | How easy is it to take medical leave for a mental health condition?               |
-| mentalhealthconsequence | Do you think discussing a mental health issue with your employer would have consequences? |
-| physhealthconsequence   | Do you think discussing a physical health issue with your employer would have consequences? |
-| coworkers               | Would you discuss a mental health issue with your coworkers?                      |
-| supervisor              | Would you discuss a mental health issue with your supervisor(s)?                  |
-| mentalhealthinterview   | Would you bring up a mental health issue with a potential employer in an interview?|
-| physhealthinterview     | Would you bring up a physical health issue with a potential employer in an interview?|
-| mentalvsphysical        | Do you feel your employer takes mental health as seriously as physical health?    |
-| obs_consequence         | Have you observed negative consequences for coworkers with mental health issues?  |
-| comments                | Any additional notes or comments                                                  |
-
 
 <img src="img/0.png" width="600" height="400">
 
 
 
 ```python
-survey.shape
+df.dtypes
 ```
 
 ```bash
-
-(1259, 27)
+course_id               int64
+course_title           object
+url                    object
+is_paid                object
+price                  object
+num_subscribers         int64
+num_reviews             int64
+num_lectures            int64
+level                  object
+content_duration       object
+published_timestamp    object
+subject                object
+dtype: object
 ```
+
+
+## Data Cleaning
+
+**'content_duration' is in string, but we will simplify to float, indicating 1.5 hours == 1.5 and 35 mins == 0.35.**
+
 
 ```python
-survey.columns
+
+
+# First we will take care of all hours and hour.
+df['content_duration'] = df['content_duration'].str.replace('hours', '').str.replace('hour', '')
+
+
+
+# Then we will change minutes into decimals.
+df['content_duration'] = df['content_duration'].apply(lambda x: int(x.replace('mins', '').strip()) * 1/100 if 'mins' in x else x)
+
+
+
+# There is a one data that mixed data with level and content duration. So we fix it here.
+df.loc[df['level'] == '52'] = df.loc[df['level'] == '52'].replace({'52':'Beginner Level', 'Beginner Level': 0.52})
 
 ```
+
+
+**Also, we will change the date type of Price to int, rather than string. "Free" and "TRUE" items will have 0 value.¶**
+
+```python
+df['price'] = df['price'].replace('Free', 0).replace('TRUE', 0).astype(int)
+
+```
+
+**We will clean the 'ispaid' column as there are duplicated values such as True/TRUE and False/False. Also we will drop the one with incorrect value.**
+
+```python
+df['is_paid'] = df['is_paid'].replace("TRUE", "True").replace("FALSE", "False")
+df.drop(df.loc[df['is_paid'] == 'https://www.udemy.com/learnguitartoworship/'].index, inplace=True)
+
+```
+**There is a data with wrong content duration or NaN value, so we will drop it as we are not sure what it means.**
+
+
+```python
+df.drop(df.loc[df['content_duration'].str.contains('questions', na=False)].index, inplace=True)
+df['content_duration'] = df['content_duration'].astype(float)
+
+```
+
+**Lastly, we will change the time stamps to just date (month/date/year) to simplify.**
+
+```python
+df['published_timestamp'] = pd.to_datetime(df['published_timestamp']).dt.strftime('%m/%d/%Y')
+
+```
+
+## EDA
+1. Subject Categories
+
+```python
+# The number of courses under the categories
+course_categories = df['subject'].value_counts().to_frame().reset_index().rename({'subject':'Number of Courses', 
+                                                                                  'index':'Categories'}, axis='columns')
+
+fig = px.pie(course_categories, values='Number of Courses', names='Categories', 
+             title='Number of Courses under Different Categories', color='Categories',
+             color_discrete_map={'Web Development':'darkblue', 'Business Finance':'royalblue', 
+                                'Musical Instruments':'cyan', 'Graphic Design':'lightcyan'})
+fig.show()
+
+```
+
 <img src="img/1.png" width="600" height="400">
 
 
+**Majority of the courses are either in Web Development and Business Finance. However, we did not see any Business Finance courses in Top 10 the most subscribed course. Learning musicla instruments is quite famouse in Udemy.**
+
+2. The Most Famous Course
+
+We will be using number of suscribers of the courses to measure which ones are the most famous courses in Udemy.
+
+a. All Subjects
+
 ```python
-survey.describe()
+# Most subscribed courses
+most_sub_courses = df.sort_values(by='num_subscribers', ascending=False)[:10]
+
+fig = px.bar(most_sub_courses, x='course_title', y='num_subscribers', color='course_title', height=600)
+fig.update_layout(autosize=True)
+fig.show()
+
 ```
 
 <img src="img/3.png" width="600" height="400">
 
+**So all top 10 courses with the most subscribers are mostly in Web Development except one course in "Free Beginner Electric Guitar Lessons" (obvioulsy, it is free!). Especially HTML5 and CSS3 is hot!**
 
+b Each Subjects
 
 ```python
-survey.isna().sum()
+
+
+bf_all = df.loc[df['subject'] == 'Business Finance']
+bf_top10 = bf_all.sort_values(by='num_subscribers', ascending=False)[:10]
+bf_top10 = bf_top10.sort_values(by='num_subscribers')
+
+wd_all = df.loc[df['subject'] == 'Web Development']
+wd_top10 = wd_all.sort_values(by='num_subscribers', ascending=False)[:10]
+wd_top10 = wd_top10.sort_values(by='num_subscribers')
+
+mi_all = df.loc[df['subject'] == 'Musical Instruments']
+mi_top10 = mi_all.sort_values(by='num_subscribers', ascending=False)[:10]
+mi_top10 = mi_top10.sort_values(by='num_subscribers')
+
+gd_all = df.loc[df['subject'] == 'Graphic Design']
+gd_top10 = gd_all.sort_values(by='num_subscribers', ascending=False)[:10]
+gd_top10 = gd_top10.sort_values(by='num_subscribers')
+
+
+
+fig = make_subplots(rows=4, cols=1,
+                   subplot_titles=("Business Finance", "Web Development", 
+                                   "Musical Instruments", "Graphic Designs"))
+
+fig.add_trace(go.Bar(y=bf_top10['course_title'], x=bf_top10['num_subscribers'],
+                     orientation='h', name='Business Finance'), row=1, col=1)
+fig.add_trace(go.Bar(y=wd_top10['course_title'], x=wd_top10['num_subscribers'],
+                     orientation='h', name='Web Development'), row=2, col=1)
+fig.add_trace(go.Bar(y=mi_top10['course_title'], x=mi_top10['num_subscribers'],
+                     orientation='h', name='Musical Instruments'), row=3, col=1)
+fig.add_trace(go.Bar(y=gd_top10['course_title'], x=gd_top10['num_subscribers'],
+                     orientation='h', name='Graphic Designs'), row=4, col=1)
+
+fig.update_layout(height=1300, title="Famouse Courses in Each Subject by the Number of Subscribers")
+
+fig.show()
+
 ```
 <img src="img/4.png" width="600" height="400">
 
+3. The level of courses under each categories
 
-
-```python
-percent_missing = survey.isnull().sum() * 100 / len(survey)
-null_percentage = pd.DataFrame({'Column Name': survey.columns,
-                                 'Missing Percentage': percent_missing})
-
-null_percentage.sort_values('Missing Percentage', ascending=False, inplace=True)
-null_percentage
-
-```
-
-| Column Name               | Missing Percentage  |
-|---------------------------|--------------------:|
-| comments                  | 86.973789           |
-| state                     | 40.905481           |
-| work_interfere            | 20.969023           |
-| self_employed             | 1.429706            |
-| seek_help                 | 0.000000            |
-| obs_consequence           | 0.000000            |
-| mental_vs_physical        | 0.000000            |
-| phys_health_interview     | 0.000000            |
-| mental_health_interview   | 0.000000            |
-| supervisor                | 0.000000            |
-| coworkers                 | 0.000000            |
-| phys_health_consequence   | 0.000000            |
-| mental_health_consequence | 0.000000            |
-| leave                     | 0.000000            |
-| anonymity                 | 0.000000            |
-| Timestamp                 | 0.000000            |
-| wellness_program          | 0.000000            |
-| Age                       | 0.000000            |
-| benefits                  | 0.000000            |
-| tech_company              | 0.000000            |
-| remote_work               | 0.000000            |
-| no_employees              | 0.000000            |
-| treatment                 | 0.000000            |
-| family_history            | 0.000000            |
-| Country                   | 0.000000            |
-| Gender                    | 0.000000            |
-| care_options              | 0.000000            |
-
-
-## 2. Data Cleaning
-
-a. Null Values
+**Here we will look at the content level of courses in each categories. There are 4 major levles such as: all levels, bigenner, intermediate and expert level.**
 
 ```python
-survey.loc[survey['comments'].isna() == False].head()
+
+
+# Level and the number of courses under each level
+level_courses = df['level'].value_counts().reset_index().rename(columns={'index':'Levels', 'level':'Number of Courses'})
+
+fig = px.pie(level_courses, values='Number of Courses', names='Levels',
+             title='Number of Courses under Different Categories', color='Levels',
+             color_discrete_map={'All Levels':'lavender', 'Beginner Level':'lightsalmon', 
+                                'Intermediate Level':'lightcoral', 'Expert Level':'indigo'})
+fig.show()
+
 ```
-
-
 <img src="img/5.png" width="600" height="400">
 
-**Although 87% of the 'comments' column is missing and I thought about dropping the column, I think I can use the comments for world cloud to find the most common words. So we will just leave it as it is for now.**
-
-### State
+**All level courses are more than half. And also lots of beginner level courses. Less than 2% is expert level courses. Now we will look at the levels of courses under the different categories.**
 
 ```python
-survey.loc[survey['state'].isna() == True].shape
+# Dataframes for each subject categories
+bf = df.groupby(['subject', 'level']).count()['course_id']['Business Finance'].to_frame().reset_index().rename(columns={'level':'Level', 
+                                                                                       'course_id':'Number of Courses'})
+wd = df.groupby(['subject', 'level']).count()['course_id']['Web Development'].to_frame().reset_index().rename(columns={'level':'Level', 
+                                                                                       'course_id':'Number of Courses'})
+mi = df.groupby(['subject', 'level']).count()['course_id']['Musical Instruments'].to_frame().reset_index().rename(columns={'level':'Level', 
+                                                                                       'course_id':'Number of Courses'})
+gd = df.groupby(['subject', 'level']).count()['course_id']['Graphic Design'].to_frame().reset_index().rename(columns={'level':'Level', 'course_id':'Number of Courses'})
 
-```
 
-```bash
-(515, 27)
-```
 
-```python
-survey.loc[(survey['state'].isna() == True) & (survey['Country'] != 'United States')].shape
 
-```
+# Levles and the number of courses under each categories
 
-```bash
-(504, 27)
+fig = make_subplots(rows=2, cols=2, specs=[[{"type": "pie"}, {"type": "pie"}],
+                                           [{"type": "pie"}, {"type": "pie"}]], 
+                    subplot_titles=("Business Finance","Wep Development", "Musical Instruments", "Graphic Design"))
 
-```
+colors = ['gold', 'mediumturquoise', 'darkorange', 'lightgreen']
 
-**It looks like except the 11 rows with NULL, the rest of the 504 rows with NULL in the state column belong to non-US countries such as UK and Australia. But we can query data only for United States, and find some information on different states, so we will also keep this as it is.**
+fig.add_trace(go.Pie(values=bf['Number of Courses'], labels=bf['Level']),
+              row=1, col=1)
 
-### Work Interfere
+fig.add_trace(go.Pie(values=wd['Number of Courses'], labels=wd['Level']),
+              row=1, col=2)
 
-```python
-survey['work_interfere'].value_counts()
-```
+fig.add_trace(go.Pie(values=mi['Number of Courses'], labels=mi['Level']),
+              row=2, col=1)
 
-```bash
-Sometimes    465
-Never        213
-Rarely       173
-Often        144
-Name: work_interfere, dtype: int64
+fig.add_trace(go.Pie(values=gd['Number of Courses'], labels=gd['Level']),
+              row=2, col=2)
 
-```
+fig.update_layout(height=900, showlegend=True,  title_text="The number of Courses with Different Levels Under Each Categories")
+fig.update_traces(hoverinfo='label+percent', textinfo='label', textfont_size=13,
+                  marker=dict(colors=colors, line=dict(color='#000000', width=2)))
 
-```python
-survey.loc[survey['work_interfere'].isna() == True].head()
+fig.show()
+
 ```
 
 <img src="img/6.png" width="600" height="400">
 
 
-**We will fill the NULL values with the mode value of the 'work interfere' column.**
+**Most of the subjects has the most courses in all and beginner level. Especially for graphic design courses, almost 90% of its courses are for beginner or all levels. The courses in musical instruments has the most courses in intermediate level.**
+
+4. Price of the Courses
 
 
 ```python
-survey['work_interfere'].fillna(survey['work_interfere'].mode()[0], inplace=True)
+# Mean price and subject categories
+mean_price_category = df.groupby('subject')['price'].mean().to_frame().reset_index()
 
-survey['work_interfere'].isna().sum()
-
-```
-
-```bash
-0
-```
-
-
-### Self Employed¶
-
-
-```python
-survey.loc[survey['self_employed'] == 'Yes']['no_employees'].value_counts()
-
-```
-
-```bash
-1-5               98
-6-25              31
-26-100             8
-100-500            5
-More than 1000     4
-Name: no_employees, dtype: int64
-```
-
-
-```python
-survey.loc[survey['self_employed'] == 'No']['no_employees'].value_counts()
-
-```
-
-```bash
-More than 1000    277
-26-100            276
-6-25              253
-100-500           168
-1-5                62
-500-1000           59
-Name: no_employees, dtype: int64
-```
-
-
-```python
-survey.loc[survey['self_employed'].isna() == True].head()
+fig = px.bar(mean_price_category, x='subject', y='price', color='subject', text='price', 
+             height=500, color_discrete_sequence=px.colors.sequential.Plasma_r)
+fig.update_layout(autosize=True, title="Mean Price of Each Subjects", 
+                  yaxis_title="Mean Price", xaxis_title="Subjects")
+fig.update_traces(textposition='outside')
+fig.update_yaxes(range=[0, 100])
+fig.show()
 
 ```
 
@@ -341,140 +332,22 @@ survey.loc[survey['self_employed'].isna() == True].head()
 
 
 
-**Based on the above information, when there is 1-6 employees for the company, the respondees are mostly self-employeed. Although this is not completely accurate, we will temporarily fill the NULL value according to that for now.**
+**Web Development has the highest mean price, and Musical Instruments has the cheapest.**
+
+5. Free vs Paid Courses
+
+Here we will be comparing two types of courses, free and paid. We will try to find out if paid materials has the higher number of letures and longer hours, or if free materials has the higher number of subscribers and reviews.
+
+a. Number of Free vs Paid courses
 
 
 ```python
-survey['self_employed'].value_counts()
-```
+free_count = df['is_paid'].value_counts().to_frame().reset_index().rename(columns={'index':'Is Free?', 'is_paid':'Count'})
+free_count.replace({'True':'Free', 'False':'Paid'}, inplace=True)
 
-```bash
-No     1095
-Yes     146
-Name: self_employed, dtype: int64
-```
+fig = px.pie(free_count, values='Count', names='Is Free?', title='Free vs Paid Courses', color='Count',
+            color_discrete_sequence=['darksalmon', 'olive'])
 
-
-```python
-
-
-values = survey['no_employees'].eq('1-5').map({False: 'No', True: 'Yes'})
-survey['self_employed'] = survey['self_employed'].fillna(values)
-
-survey['self_employed'].isna().sum()
-
-
-```
-
-```bash
-0
-```
-
-2. Data Consistency
-### Gender
-
-There is a lot going on here. We will first fix all typos such as 'M', 'F', 'f' to correct Male and Female category first.
-
-```python
-survey['Gender'].value_counts().to_frame().sample(2)
-
-
-```
-
-```bash
-
-	            Gender
-Neuter 	        1
-Genderqueer 	1
-```
-
-
-
-```python
-
-
-LGBT = survey['Gender'].str.contains('Trans|Neuter|queer|andro|Andro|Enby|binary|trans')
-survey.loc[LGBT, 'Gender'] = 'LGBT'
-
-
-
-Others = survey['Gender'].str.contains('N|A|p')
-survey.loc[Others, 'Gender'] = 'Others'
-
-Female = survey['Gender'].str.contains('F|Wo|f|wo')
-survey.loc[Female, 'Gender'] = 'Female'
-
-
-
-Male = ~survey['Gender'].isin(['Female', 'Others', 'LGBT'])
-survey.loc[Male, 'Gender'] = 'Male'
-
-survey['Gender'].value_counts()
-
-```
-
-```bash
-Male      994
-Female    248
-LGBT       12
-Others      5
-Name: Gender, dtype: int64
-```
-
-### Age
-
-```python
-min(survey['Age'])
-
-```
-
-```bash
--1726
-
-```
-
-```python
-max(survey['Age'])
-```
-
-```bash
-99999999999
-
-```
-```python
-survey['Age'].mean()
-```
-
-```bash
-79428148.31135821
-
-```
-
-```python
-survey.loc[survey['Age'] > 80, 'Age'] = np.nan
-survey.loc[survey['Age'] < 18, 'Age'] = np.nan
-
-survey['Age'].mean()
-
-```
-
-```bash
-32.07673860911271
-
-```
-
-```python
-survey['Age'] = survey['Age'].fillna(value=survey['Age'].mean())
-
-```
-
-## 3. Data Analysis & Visualizations
-1. Age
-
-
-```python
-fig = px.histogram(survey, x="Age")
-fig.update_layout(template='none')
 fig.show()
 ```
 
@@ -482,20 +355,40 @@ fig.show()
 
 
 
-2. Gender
+
+b. Different factors in free vs paid courses¶
 
 
 ```python
-gender_df = survey.groupby('Gender').count()['Timestamp'].to_frame()\
-            .reset_index().rename(columns={'Timestamp':'Count'}).sort_values(by='Count', ascending=False)
 
-colors = ['mediumturquoise', 'darkorange', 'lightgreen', 'gold']
 
-fig = go.Figure(data=[go.Pie(labels=gender_df['Gender'],
-                             values=gender_df['Count'])])
-fig.update_traces(hoverinfo='percent', textinfo='label', textfont_size=20,
-                  marker=dict(colors=colors, line=dict(color='#000000', width=2)))
-fig.update_layout(title='Gender')
+free_v_paid = df.groupby('is_paid')[['content_duration', 
+                       'num_lectures', 
+                       'num_subscribers', 
+                       'num_reviews']].sum().reset_index().replace({'False': 'Free', 'True':'Paid'})
+
+
+fig = make_subplots(rows=2, cols=2, specs=[[{"type": "bar"}, {"type": "bar"}], [{"type": "bar"}, {"type": "bar"}]],
+                   subplot_titles=("Content Duration", "Number of Lectures", "Number of Subscribers", "Number of Reviews"))
+
+fig.add_trace(go.Bar(x=free_v_paid['is_paid'], y=free_v_paid['content_duration'],
+                    marker=dict(color=free_v_paid['content_duration'])),
+              row=1, col=1)
+
+fig.add_trace(go.Bar(x=free_v_paid['is_paid'], y=free_v_paid['num_lectures'],
+                    marker=dict(color=free_v_paid['num_lectures'])),
+              row=1, col=2)
+
+fig.add_trace(go.Bar(x=free_v_paid['is_paid'], y=free_v_paid['num_subscribers'],
+                    marker=dict(color=free_v_paid['num_subscribers'])),
+              row=2, col=1)
+
+fig.add_trace(go.Bar(x=free_v_paid['is_paid'], y=free_v_paid['num_reviews'],
+                    marker=dict(color=free_v_paid['num_reviews'])),
+              row=2, col=2)
+
+fig.update_layout(showlegend=False, height=700, title_text="Free vs Paid Couses")
+
 fig.show()
 
 ```
@@ -503,26 +396,56 @@ fig.show()
 <img src="img/9.png" width="600" height="400">
 
 
-3. Country¶
+
+**As you can see from here, Paid courses has higher numbers of lectures, subscribers and reveiws than Free courses.**
+
+6. Time Series
+
+We will look at the date publisehd for each course subjects, this visualization was originally generated by user Sayar_Banner in Kaggle.
+
 
 
 ```python
-country_df = survey.groupby('Country').count()['Timestamp'].to_frame().reset_index().rename(columns={'Timestamp':'Count'})
+subjects = df['subject'].unique()
+subset = df[['published_timestamp','subject']]
+subset = subset.sort_values('published_timestamp')
+time_series = subset['published_timestamp'].value_counts().reset_index()
+time_series.columns = ['Date', 'Counts']
+time_series = time_series.sort_values('Date')
+time_series['Cum Count'] = time_series['Counts'].cumsum()
+dummies = pd.get_dummies(subset['subject'])
+subset = subset.join(dummies)
 
-codes = pd.read_csv('codes.csv')
-codes.drop(columns='GDP (BILLIONS)', inplace=True)
-code_dict = codes.set_index('COUNTRY')['CODE'].to_dict()
+subset['Cum Business'] = subset['Business Finance'].cumsum()
+subset['Cum Software'] = subset['Web Development'].cumsum()
+subset['Cum Music'] = subset['Musical Instruments'].cumsum()
+subset['Cum Design'] = subset['Graphic Design'].cumsum()
+subset_melt = subset.melt(id_vars='date_published', value_vars=['Cum Business', 'Cum Software', 'Cum Design', 'Cum Music'])
 
 
 
-country_df['Code'] = country_df['Country'].map(code_dict)
+fig = make_subplots(rows=2, cols=1, subplot_titles=("Time series plot of number of courses",
+                                                    "Time series plot of number of courses by subject"))
+df.sort_values('published_timestamp', inplace=True)
 
+fig.append_trace(go.Scatter(x=time_series['Date'], y=time_series['Cum Count'], name="All",
+                            mode='lines'), row=1, col=1)
 
-fig = px.choropleth(country_df, locations="Code",
-                    color="Count", 
-                    hover_name="Country",
-                    color_continuous_scale=px.colors.sequential.OrRd)
-fig.update_layout(title='Countries')
+fig.append_trace(go.Scatter(x=subset['published_timestamp'], y=subset['Cum Business'], mode="lines",
+                            name="Business", line=dict(color="#617C58")), row=2, col=1)
+fig.append_trace(go.Scatter(x=subset['published_timestamp'], y=subset['Cum Software'], mode="lines",
+                            name="Software", line=dict(color="#74597D", dash="longdashdot")),
+                 row=2, col=1)
+
+fig.append_trace(go.Scatter(x=subset['published_timestamp'], y=subset['Cum Design'], mode="lines",
+                            name="Design", line=dict(color="#C85A17", dash="dash")),
+                 row=2, col=1)
+
+fig.append_trace(go.Scatter(x=subset['published_timestamp'], y=subset['Cum Music'], mode="lines",
+                            name="Music", line=dict(color="#1884C7", dash="dashdot")),
+                 row=2, col=1)
+
+fig.update_layout(width=900, height=800)
 fig.show()
 
 ```
@@ -531,632 +454,155 @@ fig.show()
 
 
 
-4. Work Interference with Mental Health based on Gender¶
+7. Relationships between numerical values
+
+**We will look at some scatter plots for numerical values and if there is any relationships**
 
 
 ```python
+fig = make_subplots(rows=2, cols=2,
+                   subplot_titles=("Number of Subscrb. and Number of Reviews", 
+                                   "Number of Subscrb. and Price", 
+                                   "Number of Lectures and Price",
+                                   "Content Duration and Price"))
 
+fig.add_trace(go.Scatter(x=df['num_subscribers'], y=df['num_reviews'], mode='markers'), row=1, col=1)
+fig.add_trace(go.Scatter(x=df['num_subscribers'], y=df['price'], mode='markers'), row=1, col=2)
+fig.add_trace(go.Scatter(x=df['num_lectures'], y=df['price'], mode='markers'), row=2, col=1)
+fig.add_trace(go.Scatter(x=df['content_duration'], y=df['price'], mode='markers'), row=2, col=2)
 
-work_gender = survey.groupby(['work_interfere', 'Gender']).count()['Timestamp']\
-            .to_frame().reset_index().rename(columns={'work_interfere':'Work Interference', 'Timestamp':'Count'})
+fig.update_xaxes(title_text="Number of Subscribers", row=1, col=1)
+fig.update_xaxes(title_text="Number of Subscribers", row=1, col=2)
+fig.update_xaxes(title_text="Number of Lectures", row=2, col=1)
+fig.update_xaxes(title_text="Content Duration", row=2, col=2)
 
+fig.update_yaxes(title_text="Number of Reviews", row=1, col=1)
+fig.update_yaxes(title_text="Price", row=1, col=2)
+fig.update_yaxes(title_text="Price", row=2, col=1)
+fig.update_yaxes(title_text="Price", row=2, col=2)
 
-
-
-fig = px.sunburst(work_gender, path=['Work Interference', 'Gender'], values='Count',
-                 color='Work Interference', color_discrete_sequence=px.colors.qualitative.G10)
-fig.update_layout(height=700, title='Work Interference Level')
+fig.update_layout(height=800, width=900, showlegend=False)
 fig.show()
 
 ```
 
 <img src="img/11.png" width="600" height="400">
 
+**We can see that there are no speical relationships except the first plot, number of subscribers and number of reviews. It seems apparent that if the course has high number of subscribers, it will most likely high number of reviews. Other than that, it seems no relationships between other variables.**
+
+## Machine Learning
+
+We will try to predict the price based on the number of subscribers, and other factors
+
+a. Linear Regression (number of subscribers and price)
 
 ```python
+from sklearn.linear_model import LinearRegression
+df_linear = df[['course_id', 'course_title', 'price']]
 
 
-work_gender_percent = work_gender.groupby(['Gender','Work Interference'])\
-                    .agg({'Count':'sum'}).groupby(level=0).apply(lambda x: round(100 * x / float(x.sum()), 2))\
-                    .reset_index()
-work_gender_percent = work_gender_percent.rename(columns={'Count':'Percentage'})
+
+skl_reg = LinearRegression().fit(df[['num_subscribers']].values, df['price'].values)
+skl_reg.score(df[['num_subscribers']].values, df['price'].values)
+
+```
+
+```bash
+0.0025775267802027324
+
+```
+
+```python
+df_linear['pred_price'] = skl_reg.predict(df[['price']].values)
+
+df_linear.head()
+
+```
+
+```bash
+ 	course_id 	course_title 	price 	pred_price
+1966 	347104 	Learn to Play the Oboe: Beginner to Pro in Und... 	50 	65.023883
+2205 	344348 	Master the Clarinet: Intermediate Instruction ... 	50 	65.023883
+2206 	373556 	Advanced Clarinet Studies - Learn to Master th... 	50 	65.023883
+2285 	349142 	Master Oboe Playing: Intermediate Instruction ... 	50 	65.023883
+1844 	338926 	Learn to Play Clarinet: Beginner to Pro in Und... 	50 	65.023883
+```
 
 
-fig = px.sunburst(work_gender_percent, path=['Gender', 'Work Interference'], values='Percentage',
-                 color='Percentage', color_continuous_scale='PuRd')
-fig.update_layout(height=700, title='Work Interference Level based on Gender')
-fig.show()
+b. Predicting subscriber count (https://www.kaggle.com/sayar1106/comprehensive-eda-predicting-subscriber-count/notebook)
+
+```python
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+from sklearn.preprocessing import StandardScaler
+
+num_cols = ['price', 'num_reviews', 'num_lectures', 'content_duration']
+cat_cols = ['is_paid', 'level', 'subject']
+X_data, y_data = df[num_cols].merge(pd.get_dummies(df[cat_cols]), left_index=True, right_index=True), df['num_subscribers']
+
+
+X_train, X_test, y_train, y_test = train_test_split(X_data, y_data, test_size=0.2, random_state=42)
+col_names = X_train.columns
+
+
+# Applying Standard Scaler
+scaler = StandardScaler()
+scaler = scaler.fit(X_train) 
+X_train = scaler.transform(X_train)
+X_test = scaler.transform(X_test)
+
+
+rf_model = RandomForestRegressor(n_estimators=500, random_state=42)
+
+
+rf_model.fit(X_train, y_train)
+
+```
+
+```bash
+RandomForestRegressor(bootstrap=True, criterion='mse', max_depth=None,
+                      max_features='auto', max_leaf_nodes=None,
+                      min_impurity_decrease=0.0, min_impurity_split=None,
+                      min_samples_leaf=1, min_samples_split=2,
+                      min_weight_fraction_leaf=0.0, n_estimators=500,
+                      n_jobs=None, oob_score=False, random_state=42, verbose=0,
+                      warm_start=False)
+```
+
+```python
+y_train_preds = rf_model.predict(X_train)
+
+print("Mean Squared Error on training data is: {:.2f}".format(mean_squared_error(y_train_preds, y_train)))
+
+```
+
+```bash
+Mean Squared Error on training data is: 5978532.78
+```
+
+```python
+y_pred = rf_model.predict(X_test)
+
+print("Mean Squared Error on testing data is: {:.2f}".format(mean_squared_error(y_pred, y_test)))
+
+```
+
+```bash
+Mean Squared Error on testing data is: 23191721.85
+```
+
+```python
+# Feature Importance
+imp_features = pd.Series(rf_model.feature_importances_, index=col_names).nlargest(5)
+px.bar(x=imp_features.index, y=imp_features.values,
+       labels={'x':"Features", 'y':"Importance Criterion"},
+       color=imp_features.index,
+       color_discrete_sequence=px.colors.qualitative.T10,
+       title="Feature Importance")
 
 ```
 
 <img src="img/12.png" width="600" height="400">
 
 
-
-5. Work Interference with Mental Health based on the Company Type (Tech/Non-Tech)¶
-
-
-```python
-
-
-tech_work = survey.groupby(['tech_company', 'work_interfere']).count()['Timestamp']\
-            .to_frame().reset_index().rename(columns={'tech_company': 'Tech Company?', 
-                                                      'work_interfere': 'Work Interference', 
-                                                      'Timestamp': 'Count'})
-
-
-tech_work = tech_work.groupby(['Tech Company?','Work Interference'])\
-                    .agg({'Count':'sum'}).groupby(level=0).apply(lambda x: round(100 * x / float(x.sum()), 2))\
-                    .reset_index()
-tech_work = tech_work.rename(columns={'Count':'Percentage'})
-
-
-fig = px.bar(tech_work, x="Percentage", y="Tech Company?", color='Work Interference', orientation='h',
-             height=400, title='Is company directly related to Tech?', text='Percentage',
-             color_discrete_sequence=px.colors.qualitative.G10)
-fig.update_layout(template='none', hovermode='closest')
-fig.update_traces(texttemplate='%{text}%')
-fig.show()
-```
-
-<img src="img/13.png" width="600" height="400">
-
-
-
-
-6. Remote Work Environment and Work Interference¶
-
-
-```python
-remote_work = survey.groupby(['remote_work', 'work_interfere']).count()['Timestamp']\
-            .to_frame().reset_index().rename(columns={'remote_work': 'Work From Home?', 
-                                                      'work_interfere': 'Work Interference', 
-                                                      'Timestamp': 'Count'})
-
-
-
-remote_work = remote_work.groupby(['Work From Home?','Work Interference'])\
-                    .agg({'Count':'sum'}).groupby(level=0).apply(lambda x: round(100 * x / float(x.sum()), 2))\
-                    .reset_index()
-remote_work = remote_work.rename(columns={'Count':'Percentage'})
-
-
-
-fig = px.bar(remote_work, x="Percentage", y="Work From Home?", color='Work Interference', orientation='h',
-             height=400, title='Remote Work Environment', text='Percentage',
-             color_discrete_sequence=px.colors.qualitative.G10)
-fig.update_layout(template='none', hovermode='closest')
-fig.update_traces(texttemplate='%{text}%')
-fig.show()
-
-```
-
-<img src="img/14.png" width="600" height="400">
-
-
-
-7. Mental Health Benefits¶
-
-
-```python
-benefits = survey.groupby('benefits').count()['Timestamp'].to_frame().\
-            reset_index().rename(columns={'benefits': 'Benefits', 'Timestamp': 'Count'})
-care_options = survey.groupby('care_options').count()['Timestamp'].to_frame().\
-            reset_index().rename(columns={'care_options': 'Care Options', 'Timestamp': 'Count'})
-wellness_program = survey.groupby('wellness_program').count()['Timestamp'].to_frame().\
-            reset_index().rename(columns={'wellness_program': 'Wellness Program', 'Timestamp': 'Count'})
-help_resource = survey.groupby('seek_help').count()['Timestamp'].to_frame().\
-            reset_index().rename(columns={'seek_help': 'Help Resource', 'Timestamp': 'Count'})
-
-
-
-colors = ['gold', 'mediumturquoise', 'darkorange', 'lightgreen']
-specs = [[{'type':'domain'}, {'type':'domain'}], [{'type':'domain'}, {'type':'domain'}]]
-fig = make_subplots(rows=2, cols=2, specs=specs)
-
-fig.add_trace(go.Pie(labels=benefits['Benefits'], 
-                     values=benefits['Count'], 
-                     name="Benefits"), 1, 1)
-fig.add_trace(go.Pie(labels=care_options['Care Options'], 
-                     values=care_options['Count'], 
-                     name="Care Options"), 1, 2)
-fig.add_trace(go.Pie(labels=wellness_program['Wellness Program'], 
-                     values=wellness_program['Count'], 
-                     name="Wellness Program"), 2, 1)
-fig.add_trace(go.Pie(labels=help_resource['Help Resource'], 
-                     values=help_resource['Count'], 
-                     name="Help Resource"), 2, 2)
-
-fig.update_traces(hole=.5, hoverinfo="label+percent+name",
-                  marker=dict(line=dict(color='#000000', width=2)))
-fig.update_layout(title_text="Mental Health Benefits", height=800, width=950,
-                  annotations=[dict(text='Benefits', x=0.168, y=0.815, font_size=20, showarrow=False),
-                               dict(text='Care<br>Options', x=0.828, y=0.822, font_size=20, showarrow=False),
-                               dict(text='Wellness<br>Program', x=0.168, y=0.18, font_size=20, showarrow=False),
-                               dict(text='Help<br>Resource', x=0.833, y=0.18, font_size=20, showarrow=False)])
-fig.show()
-
-```
-
-<img src="img/15.png" width="600" height="400">
-
-
-
-
-8. Mental Health vs. Pysical Health
-Do you think that discussing a mental/phsical health issue with your employer would have negative consequences?
-
-
-```python
-mental = survey['mental_health_consequence'].value_counts().to_frame().reset_index()\
-        .rename(columns={'index': 'Mental', 'mental_health_consequence': 'Count'})
-physical = survey['phys_health_consequence'].value_counts().to_frame().reset_index()\
-        .rename(columns={'index': 'Physical', 'phys_health_consequence': 'Count'})
-
-
-
-fig = go.Figure()
-fig.add_trace(go.Bar(y=mental['Mental'], x=mental['Count'], 
-                     name='Mental', orientation='h',
-                     marker=dict(color='rgba(246, 78, 139, 0.6)',
-                                 line=dict(color='rgba(246, 78, 139, 1.0)', width=3))))
-fig.add_trace(go.Bar(y=physical['Physical'], x=physical['Count'],
-                     name='Physical', orientation='h',
-                     marker=dict(color='rgba(58, 71, 80, 0.6)', 
-                                 line=dict(color='rgba(58, 71, 80, 1.0)', width=3))))
-
-fig.update_layout(barmode='stack', template='none', hovermode='closest',
-                 title='Mental or Physical Health results in Negative Consequences?')
-fig.update_xaxes(showgrid=False)
-fig.show()
-
-```
-
-<img src="img/16.png" width="600" height="400">
-
-
-**Have you heard of or observed negative consequences for coworkers with mental health conditions in your workplace?**
-
-
-```python
-observations = survey['obs_consequence'].value_counts().to_frame().reset_index()\
-                .rename(columns={'index':'Observations', 'obs_consequence': 'Count'})
-
-
-fig = go.Figure()
-fig.add_trace(go.Bar(y=mental['Mental'], x=mental['Count'], 
-                     name='Assumptions', orientation='h',
-                     marker=dict(color='rgba(161, 191, 133, 0.6)',
-                                 line=dict(color='rgba(161, 191, 133, 1.0)', width=3))))
-fig.add_trace(go.Bar(y=observations['Observations'], x=observations['Count'],
-                     name='Consequences', orientation='h',
-                     marker=dict(color='rgba(35, 34, 45, 0.6)', 
-                                 line=dict(color='rgba(35, 34, 45, 1.0)', width=3))))
-
-fig.update_layout(barmode='stack', template='none', hovermode='closest',
-                 title='Mental Health Condition results in Negative Consequences?')
-fig.update_xaxes(showgrid=False)
-fig.show()
-
-```
-
-<img src="img/17.png" width="600" height="400">
-
-9. Mental/Physical Health Issues in Interviews
-
-Would you bring up a mental/physical health issue with a potential employer in an interview?
-
-```python
-mental_int = survey['mental_health_interview'].value_counts().to_frame().reset_index()\
-        .rename(columns={'index': 'Mental', 'mental_health_interview': 'Count'})
-physical_int = survey['phys_health_interview'].value_counts().to_frame().reset_index()\
-        .rename(columns={'index': 'Physical', 'phys_health_interview': 'Count'})
-
-
-fig = go.Figure()
-fig.add_trace(go.Bar(y=mental_int['Mental'], x=mental_int['Count'], 
-                     name='Mental', orientation='h',
-                     marker=dict(color='rgba(246, 78, 139, 0.6)',
-                                 line=dict(color='rgba(246, 78, 139, 1.0)', width=3))))
-fig.add_trace(go.Bar(y=physical_int['Physical'], x=physical_int['Count'],
-                     name='Physical', orientation='h',
-                     marker=dict(color='rgba(58, 71, 80, 0.6)', 
-                                 line=dict(color='rgba(58, 71, 80, 1.0)', width=3))))
-
-fig.update_layout(barmode='stack', template='none', hovermode='closest',
-                 title='Mental or Physical Health discussion in Interview Process?')
-fig.update_xaxes(showgrid=False)
-fig.show()
-
-```
-
-<img src="img/18.png" width="600" height="400">
-
-
-
-10. Willingness to Discuss a Mental Health Issue
-
-Would you be willing to discuss a mental health issue with your coworkers?
-
-```python
-fig = go.Figure()
-fig.add_trace(go.Histogram(x=survey['coworkers'], name='Co-workers'))
-fig.add_trace(go.Histogram(x=survey['supervisor'], name='Supervisors'))
-fig.update_traces(opacity=0.75)
-fig.update_layout(template='none', hovermode='closest', 
-                  title='Willingness to Discuss a Mental Health Issue')
-fig.show()
-
-```
-<img src="img/19.png" width="600" height="400">
-
-
-
-
-11. Word Colud on Comments
-
-```python
-comments = list(survey['comments'].dropna())
-
-
-
-
-comment = []
-for i in comments:
-    i = list(i.split(' '))
-    for j in i:
-        comment.append(j.replace(' ', ''))
-        
-com = Counter(comment)
-lower_com =  {k.lower(): v for k, v in com.items()}
-
-
-
-
-conjunction = ['Although', 'As if', 'Because', 'Even', 'Even though', 'If then', 'In order that', 'Now when', 'Rather than']
-conjunction = [i.lower() for i in conjunction]
-other_words = ['i\'m', 'not', 'on', 'the', 'my', 'be', 'when', 'which', 'could', 'would', 'a', 'an', 'to', 'too',
-              'so', 'many', 'of', 'don\'t', 'have', 'that', 'also', 'did', 'get', 'may', 'lot' 'i\'ve', 'i',
-              'this', 'however', 'based', 'doesn\'t', 'it\'', 'than', 'including', 'non', 'however\'', 'than\'',
-              'inclulding\'', 'my\'', 'them', 'does', 'though', 'they', 'we', 'know']
-all_words = conjunction + other_words
-
-
-formatted_comments = []
-for key, value in lower_com.items():
-    if (len(key) > 3) & (key not in all_words):
-        formatted_comments.append(key)
-
-
-
-
-
-formatted_comments_apo = []
-for comment in formatted_comments:
-    formatted_comments_apo.append(re.sub(r"'[^.\s]*", "", comment))
-
-
-
-
-plt.rcParams['figure.figsize'] = (15, 10)
-wordcloud = WordCloud(max_font_size=50, 
-                      max_words=60,
-                      stopwords=all_words,
-                      background_color="white").generate(str(formatted_comments_apo))
-
-plt.imshow(wordcloud, interpolation="bilinear")
-plt.axis("off")
-plt.show()
-
-```
-
-<img src="img/20.png" width="600" height="400">
-
-
-
-## 4. Machine Learning
-
-```python
-train_df = pd.read_csv('survey.csv')
-
-
-train_df = train_df.drop(['comments'], axis= 1)
-train_df = train_df.drop(['state'], axis= 1)
-train_df = train_df.drop(['Timestamp'], axis= 1)
-
-```
-
-
-Cleaning all NaN values¶
-
-```python
-train_df.columns
-```
-
-```bash
-Index(['Age', 'Gender', 'Country', 'self_employed', 'family_history',
-       'treatment', 'work_interfere', 'no_employees', 'remote_work',
-       'tech_company', 'benefits', 'care_options', 'wellness_program',
-       'seek_help', 'anonymity', 'leave', 'mental_health_consequence',
-       'phys_health_consequence', 'coworkers', 'supervisor',
-       'mental_health_interview', 'phys_health_interview',
-       'mental_vs_physical', 'obs_consequence'],
-      dtype='object')
-```
-
-```python
-int_features = []
-float_features = [] 
-string_features = []
-
-for column in train_df.columns:
-    if isinstance(train_df[column][0], np.integer):
-        int_features.append(column)
-    elif isinstance(train_df[column][0], np.float):
-        float_features.append(column)
-    else:
-        string_features.append(column)    
-
-
-
-
-null_int = 0
-null_string = 'NaN'
-null_float = 0
-
-for feature in train_df:
-    if feature in int_features:
-        train_df[feature] = train_df[feature].fillna(null_int)
-    elif feature in string_features:
-        train_df[feature] = train_df[feature].fillna(null_string)
-    elif feature in float_features:
-        train_df[feature] = train_df[feature].fillna(null_float)
-
-
-
-
-train_df['Gender'] = survey['Gender']
-genders = ['Female', 'Male']
-trans = ~train_df['Gender'].isin(genders)
-train_df.loc[trans, 'Gender'] = 'trans'
-train_df['Gender'] = train_df['Gender'].str.lower()
-
-
-train_df['Age'].fillna(train_df['Age'].median(), inplace = True)
-ages = pd.Series(train_df['Age'])
-ages[ages<18] = train_df['Age'].median()
-
-train_df['Age'] = ages
-ages = pd.Series(train_df['Age'])
-ages[ages>120] = train_df['Age'].median()
-train_df['Age'] = ages
-
-train_df['age_range'] = pd.cut(train_df['Age'], [0,20,30,65,100], 
-                               labels=["0-20", "21-30", "31-65", "66-100"], 
-                               include_lowest=True)
-
-
-
-
-
-train_df['self_employed'] = train_df['self_employed'].replace(np.nan, 'No')
-train_df['self_employed'] = train_df['self_employed'].replace(0, 'No')
-
-
-
-train_df['self_employed'].value_counts()
-
-```
-
-```bash
-No     1113
-Yes     146
-Name: self_employed, dtype: int64
-
-```
-
-```python
-train_df['work_interfere'] = train_df['work_interfere'].replace(np.nan, 'Don\'t know')
-train_df['work_interfere'] = train_df['work_interfere'].replace('NaN', 'Don\'t know')
-```
-
-
-Encoding Data¶
-
-
-```python
-label_dict = {}
-for feature in train_df:
-    
-    encoder = preprocessing.LabelEncoder()
-    encoder.fit(train_df[feature])
-    name_mapping = dict(zip(encoder.classes_, encoder.transform(encoder.classes_)))
-    train_df[feature] = encoder.transform(train_df[feature])
-    
-    label_key = 'label_' + feature
-    label_value = [*name_mapping]
-    
-    label_dict[label_key] = label_value
-
-
-train_df = train_df.drop(['Country'], axis= 1)
-
-corr = train_df.corr()
-
-fig = go.Figure(data=go.Heatmap(z=corr, x=corr.index, y=corr.columns, 
-                                hoverongaps=False))
-fig.update_layout(title='Correlations Between Columns', width=800, height=800)
-fig.show()
-
-
-```
-
-<img src="img/21.png" width="600" height="400">
-
-
-Scailing and Fitting¶
-
-```python
-scaler = MinMaxScaler()
-train_df['Age'] = scaler.fit_transform(train_df[['Age']])
-
-```
-
-```bash
-Age 	Gender 	self_employed 	family_history 	treatment 	work_interfere 	no_employees 	remote_work 	tech_company 	benefits 	care_options 	wellness_program 	seek_help 	anonymity 	leave 	mental_health_consequence 	phys_health_consequence 	coworkers 	supervisor 	mental_health_interview 	phys_health_interview 	mental_vs_physical 	obs_consequence 	age_range
-0 	0.431818 	0 	0 	0 	1 	2 	4 	0 	1 	2 	1 	1 	2 	2 	2 	1 	1 	1 	2 	1 	0 	2 	0 	2
-1 	0.590909 	1 	0 	0 	0 	3 	5 	0 	0 	0 	0 	0 	0 	0 	0 	0 	1 	0 	0 	1 	1 	0 	0 	2
-2 	0.318182 	1 	0 	0 	0 	3 	4 	0 	1 	1 	0 	1 	1 	0 	1 	1 	1 	2 	2 	2 	2 	1 	0 	2
-3 	0.295455 	1 	0 	1 	1 	2 	2 	0 	1 	1 	2 	1 	1 	1 	1 	2 	2 	1 	0 	0 	0 	1 	1 	2
-4 	0.295455 	1 	0 	0 	0 	1 	1 	1 	1 	2 	0 	0 	0 	0 	0 	
-
-```
-
-```python
-features = ['Age', 'Gender', 'family_history', 'benefits', 'care_options', 'anonymity', 'leave', 'work_interfere']
-X = train_df[features]
-y = train_df.treatment
-
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30, random_state=0)
-
-method_dict = {}
-rmse_dict = ()
-
-```
-
-
-Random Forest¶
-
-```python
-forest = ExtraTreesClassifier(n_estimators=250, random_state=0)
-forest.fit(X, y)
-
-importances = forest.feature_importances_
-std = np.std([tree.feature_importances_ for tree in forest.estimators_], axis=0)
-indices = np.argsort(importances)[::-1]
-
-labels = []
-for i in range(X.shape[1]):
-    labels.append(features[i])      
-
-
-fig = go.Figure()
-fig.add_trace(go.Bar(x=X.columns, y=importances[indices],
-                     error_y=dict(type='data', color='olive', array=std[indices])))
-fig.update_traces(marker_color='darkred', marker_line_color='darkred',
-                  marker_line_width=1.5, opacity=0.6)
-fig.update_layout(barmode='group', template='none', title='Feature Importances')
-fig.show()
-
-```
-
-<img src="img/22.png" width="600" height="400">
-
-
-Logistic Regression
-
-
-```python
-log_reg = LogisticRegression()
-log_reg.fit(X_train, y_train)
-y_pred_class = log_reg.predict(X_test)
-
-log_reg_accruacy_score = metrics.accuracy_score(y_test, y_pred_class)
-log_reg_accruacy_score
-
-```
-
-```bash
-0.7883597883597884
-
-```
-
-
-KNeighbors Classifier¶
-
-
-```python
-knn = KNeighborsClassifier(n_neighbors=27, weights='uniform')
-knn.fit(X_train, y_train)
-y_pred_class = knn.predict(X_test)
-
-knn_accuracy_score = metrics.accuracy_score(y_test, y_pred_class)
-knn_accuracy_score
-
-```
-
-```bash
-0.8068783068783069
-
-```
-
-
-Decision Tree Classifier
-
-
-```python
-
-
-tree = DecisionTreeClassifier(max_depth=3, min_samples_split=8, max_features=6, 
-                              criterion='entropy', min_samples_leaf=7)
-tree.fit(X_train, y_train)
-y_pred_class = tree.predict(X_test)
-
-tree_accuracy_score = metrics.accuracy_score(y_test, y_pred_class)
-tree_accuracy_score
-
-```
-
-```bash
-0.8095238095238095
-
-```
-
-
-Random Forest
-
-
-```python
-rf = RandomForestClassifier(max_depth=None, min_samples_leaf=8, min_samples_split=2, 
-                                n_estimators=20, random_state=1)
-rf.fit(X_train, y_train)
-y_pred_class = rf.predict(X_test)
-
-rf_accuracy_score = metrics.accuracy_score(y_test, y_pred_class)
-rf_accuracy_score
-
-```
-
-```bash
-0.8148148148148148
-```
-
-
-Visualization of Accuracy Scores of All Models¶
-
-
-```python
-scores = {'Name': ['Logistic Regression', 'KNeighbors Classifier', 'Decision Tree Classifier', 'Random Forest'], 
-         'Score': [0.788, 0.807, 0.81, 0.815]}
-scores = pd.DataFrame(data=scores)
-
-fig = px.bar(scores, x='Name', y='Score', color='Score',
-            color_continuous_scale=px.colors.sequential.Purples)
-fig.update_layout(template='none', title='Accuracy Scores')
-fig.update_xaxes(title='')
-fig.show()
-
-```
-
-<img src="img/23.png" width="600" height="400">
-
-
-## 5. Conclusion
-
-Well, I'm very excited to finish this data analysis on mental health survey in the Technology industry. As a person working in this industry for many coming years, I was always curious about people's mental health. Also, I could tell there were more males than female or LGBT individuals in the field. But since this is from 2014, this might not be right anymore. Also, I found it was interesting that people were identifying themselves with cis-gender, non-binary, etc. Because I only recently started learning about different gender types. And another interesting thing about gender was that people who did not belong to any male, female, and LGBT group answered their mental health interfered with work (often, sometimes) more than other genders. But I will need a larger size of data to check this.
-
-Also, either the company was directly related to Technology or not, or remote or not, the people answered similarly. It turned out many employees were not aware of wellness programs or mental health resources offered by a company.
-
-I tried using WordCloud on the comment sections, but I need to find a better way to deal with long sentences. Also, I need to continue to study machine learning, so when I follow tutorials or build models, I can have a better understanding.
-
-In conclusion, this was a very interesting analysis, and I'm hoping to do it again once I get the latest data on this topic!
